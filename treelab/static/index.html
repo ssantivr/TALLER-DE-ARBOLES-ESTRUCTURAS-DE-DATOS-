@@ -1,0 +1,481 @@
+<!doctype html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<title>TreeLab · Directorio del equipo</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='11' fill='%230b1020'/%3E%3Cpath d='M20 12 12 22M20 12 28 22M12 22 8 31M12 22 16 31M28 22 32 31' stroke='%23a78bfa' stroke-width='2.4' stroke-linecap='round'/%3E%3Ccircle cx='20' cy='11' r='4.4' fill='%23ff9f1c'/%3E%3Ccircle cx='12' cy='22' r='3.6' fill='%237cc4ff'/%3E%3Ccircle cx='28' cy='22' r='3.6' fill='%237cc4ff'/%3E%3Ccircle cx='8' cy='31' r='3' fill='%237ddc6b'/%3E%3Ccircle cx='16' cy='31' r='3' fill='%237ddc6b'/%3E%3Ccircle cx='32' cy='31' r='3' fill='%237ddc6b'/%3E%3C/svg%3E">
+<script>
+(function () {
+  var t = null;
+  try { t = localStorage.getItem("treelab-theme"); } catch (e) {}
+  if (t !== "dark" && t !== "light") t = window.matchMedia && matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+  document.documentElement.setAttribute("data-theme", t);
+})();
+</script>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="is-loading">
+<div class="aurora" aria-hidden="true"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span><span class="blob b4"></span></div>
+<div class="dots-bg" aria-hidden="true"></div>
+
+<div class="app">
+  <header class="topbar glass">
+    <button id="btnSidebar" class="icon-btn" type="button" aria-label="Mostrar u ocultar el panel lateral">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+    </button>
+    <div class="brand">
+      <svg class="logo" viewBox="0 0 40 40" aria-hidden="true">
+        <defs><linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff9f1c"/><stop offset=".5" stop-color="#a78bfa"/><stop offset="1" stop-color="#22d3ee"/></linearGradient></defs>
+        <rect x="1" y="1" width="38" height="38" rx="11" fill="url(#logoGrad)" opacity=".16"/>
+        <rect x="1.5" y="1.5" width="37" height="37" rx="10.5" fill="none" stroke="url(#logoGrad)" stroke-opacity=".55"/>
+        <path class="logo-edges" d="M20 12 12 22M20 12 28 22M12 22 8 31M12 22 16 31M28 22 32 31" stroke="url(#logoGrad)" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+        <circle class="ln1" cx="20" cy="11" r="4.2" fill="#ff9f1c"/><circle class="ln2" cx="12" cy="22" r="3.4" fill="#7cc4ff"/><circle class="ln3" cx="28" cy="22" r="3.4" fill="#7cc4ff"/><circle class="ln4" cx="8" cy="31" r="2.8" fill="#7ddc6b"/><circle class="ln5" cx="16" cy="31" r="2.8" fill="#7ddc6b"/><circle class="ln6" cx="32" cy="31" r="2.8" fill="#7ddc6b"/>
+      </svg>
+      <div class="brand-text">
+        <h1>TreeLab <span class="tag">Árbol binario</span></h1>
+        <p>Estructuras de Datos · Cuarto Semestre · Universidad Cooperativa de Colombia</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <label class="speed" for="speed">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 13l4-4M4.9 19a9 9 0 1 1 14.2 0"/></svg>
+        <span>Velocidad</span>
+        <input type="range" id="speed" min="1" max="5" step="1" value="3" aria-label="Velocidad de las animaciones">
+        <output id="speedOut" for="speed">1x</output>
+      </label>
+      <button id="btnHelp" class="icon-btn" type="button" aria-label="Ver atajos de teclado">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="6" width="18" height="12" rx="2.5"/><path d="M7 10h.01M11 10h.01M15 10h.01M8 14h8"/></svg>
+      </button>
+      <button id="btnTheme" class="icon-btn theme-toggle" type="button" aria-label="Cambiar tema">
+        <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <aside id="sidebar" class="sidebar glass" aria-label="Panel de control">
+    <button id="sheetHandle" class="sheet-handle" type="button" aria-label="Abrir o cerrar el panel de control"><span></span></button>
+    <div class="tabs" role="tablist" aria-label="Secciones">
+      <span class="tab-ind" aria-hidden="true"></span>
+      <button class="tab" role="tab" id="t-dir" data-tab="dir" aria-selected="true" aria-controls="tab-dir">Directorio</button>
+      <button class="tab" role="tab" id="t-sort" data-tab="sort" aria-selected="false" aria-controls="tab-sort" tabindex="-1">Ordenamiento</button>
+      <button class="tab" role="tab" id="t-theory" data-tab="theory" aria-selected="false" aria-controls="tab-theory" tabindex="-1">Teoría</button>
+    </div>
+
+    <div class="panels">
+      <section id="tab-dir" class="tabpanel" role="tabpanel" aria-labelledby="t-dir">
+        <div class="group-title"><span class="gnum">1</span><div><b>Operaciones</b><small>Buscar, insertar y eliminar desarrolladores</small></div></div>
+
+        <div class="card collapsible" id="searchCard">
+          <button type="button" class="card-head toggle" aria-expanded="true">
+            <span class="ch-title"><span class="ch-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg></span><span class="ch-name">Buscar</span></span>
+            <span class="ch-right"><kbd>/</kbd><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="card-body"><div class="inner">
+            <form id="formSearch" class="row" autocomplete="off" novalidate>
+              <div class="field grow">
+                <input id="searchName" type="search" placeholder="Ej: Diana" aria-label="Nombre a buscar" list="namesList">
+                <small class="err" aria-live="polite"></small>
+              </div>
+              <button class="btn primary" type="submit">Buscar</button>
+            </form>
+            <div class="chips quick" aria-label="Búsquedas rápidas">
+              <span class="hint">Rápidas:</span>
+              <button type="button" class="chip" data-quick="Diana">Diana</button>
+              <button type="button" class="chip" data-quick="Ivan">Ivan</button>
+              <button type="button" class="chip" data-quick="Jhonatan">Jhonatan</button>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="card collapsible" id="upsertCard">
+          <button type="button" class="card-head toggle" aria-expanded="true">
+            <span class="ch-title"><span class="ch-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span><span class="ch-name">Insertar o actualizar</span></span>
+            <span class="ch-right"><kbd>i</kbd><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="card-body"><div class="inner">
+            <form id="formUpsert" autocomplete="off" novalidate>
+              <div class="grid2">
+                <div class="field">
+                  <label for="fName">Nombre</label>
+                  <input id="fName" maxlength="40" placeholder="Ej: Mariana">
+                  <small class="err" aria-live="polite"></small>
+                </div>
+                <div class="field">
+                  <label for="fPhone">Teléfono</label>
+                  <input id="fPhone" maxlength="20" inputmode="tel" placeholder="310-555-0101">
+                  <small class="err" aria-live="polite"></small>
+                </div>
+              </div>
+              <div class="grid2">
+                <div class="field">
+                  <label for="fRole">Rol</label>
+                  <select id="fRole">
+                    <option>Backend</option><option>Frontend</option><option>DevOps</option><option>Data</option><option>QA</option><option>Mobile</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="fStack">Tecnologías</label>
+                  <input id="fStack" maxlength="120" placeholder="Python, Django">
+                </div>
+              </div>
+              <div class="row">
+                <button class="btn primary grow" type="submit">Insertar</button>
+                <button class="btn grow" type="button" id="btnUpdate">Actualizar</button>
+              </div>
+              <p class="hint">Si el nombre ya existe, se actualiza su teléfono (como en la agenda vista en clase).</p>
+            </form>
+          </div></div>
+        </div>
+
+        <div class="card collapsible" id="deleteCard">
+          <button type="button" class="card-head toggle" aria-expanded="true">
+            <span class="ch-title"><span class="ch-icon danger"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg></span><span class="ch-name">Eliminar</span></span>
+            <span class="ch-right"><kbd>d</kbd><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="card-body"><div class="inner">
+            <form id="formDelete" class="row" autocomplete="off" novalidate>
+              <div class="field grow">
+                <input id="delName" placeholder="Ej: Carlos" aria-label="Nombre a eliminar" list="namesList">
+                <small class="err" aria-live="polite"></small>
+              </div>
+              <button class="btn danger" type="submit">Eliminar</button>
+            </form>
+            <div class="cases">
+              <span><b>1</b>Hoja</span><span><b>2</b>Un hijo</span><span><b>3</b>Dos hijos: sucesor inorden</span>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="group-title"><span class="gnum">2</span><div><b>Recorridos</b><small>Visita los nodos paso a paso</small></div></div>
+
+        <div class="card collapsible" id="travCard">
+          <button type="button" class="card-head toggle" aria-expanded="true">
+            <span class="ch-title"><span class="ch-icon warn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h6.5"/></svg></span><span class="ch-name">Tipo de recorrido</span></span>
+            <span class="ch-right"><kbd>espacio</kbd><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="card-body"><div class="inner">
+            <div class="seg" id="travTypes" role="group" aria-label="Tipo de recorrido">
+              <button type="button" class="seg-btn active" data-trav="inorder" aria-pressed="true">Inorden ↑</button>
+              <button type="button" class="seg-btn" data-trav="inorder_desc" aria-pressed="false">Inorden ↓</button>
+              <button type="button" class="seg-btn" data-trav="preorder" aria-pressed="false">Preorden</button>
+              <button type="button" class="seg-btn" data-trav="postorder" aria-pressed="false">Postorden</button>
+              <button type="button" class="seg-btn" data-trav="levelorder" aria-pressed="false">Por niveles</button>
+            </div>
+            <p class="hint" id="travHint">Inorden: izquierda → nodo → derecha. Da los nombres en orden alfabético.</p>
+            <div class="player">
+              <button id="btnPlay" class="icon-btn play" type="button" aria-label="Reproducir recorrido">
+                <svg class="i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z"/></svg>
+                <svg class="i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+              </button>
+              <button id="btnStep" class="icon-btn" type="button" aria-label="Avanzar un paso">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5.5v13l9-6.5zM18 5v14"/></svg>
+              </button>
+              <button id="btnReset" class="icon-btn" type="button" aria-label="Reiniciar recorrido">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.3-5.7M4 4v4h4"/></svg>
+              </button>
+              <div class="player-info">
+                <span id="travStatus">Listo para iniciar</span>
+                <div class="progress"><i id="travProgress"></i></div>
+              </div>
+            </div>
+          </div></div>
+        </div>
+
+        <div class="group-title"><span class="gnum">3</span><div><b>Gestión del árbol</b><small>Cargar, balancear y exportar</small></div></div>
+
+        <div class="card collapsible" id="dataCard">
+          <button type="button" class="card-head toggle" aria-expanded="true">
+            <span class="ch-title"><span class="ch-icon ok"><svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="6" rx="7" ry="3"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3"/></svg></span><span class="ch-name">Datos</span></span>
+            <span class="ch-right"><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="card-body"><div class="inner">
+            <div class="sub-label">Cargar</div>
+            <div class="btn-grid">
+              <button type="button" class="btn" id="btnSeed">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21v-8M12 13c0-4 3-7 8-7 0 4-3 7-8 7zM12 15c0-3-2.5-5.5-7-5.5 0 3 2.5 5.5 7 5.5z"/></svg>Semilla
+              </button>
+              <button type="button" class="btn" id="btnDemo">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h7l5 5v13H7zM14 3v5h5"/></svg>Demo PDF (A–O)
+              </button>
+              <div class="btn-combo wide">
+                <button type="button" class="btn" id="btnRandom">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h.01M15 15h.01M15 9h.01M9 15h.01"/></svg>Aleatorio
+                </button>
+                <label class="combo-label" for="randomCount">cantidad</label>
+                <input id="randomCount" type="number" min="1" max="60" value="12" aria-label="Cantidad de desarrolladores aleatorios">
+              </div>
+            </div>
+            <div class="sub-label">Modificar</div>
+            <div class="btn-grid">
+              <button type="button" class="btn accent" id="btnRebalance">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v18M5 7h14M5 7l-3 7h6zM19 7l-3 7h6zM8 21h8"/></svg>Rebalancear
+              </button>
+              <button type="button" class="btn ghost-danger" id="btnClear">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>Vaciar árbol
+              </button>
+            </div>
+            <div class="sub-label">Exportar</div>
+            <div class="btn-grid">
+              <button type="button" class="btn ghost" id="btnExportJson">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Datos (JSON)
+              </button>
+              <button type="button" class="btn ghost" id="btnExportSvg">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Imagen (SVG)
+              </button>
+            </div>
+          </div></div>
+        </div>
+        <datalist id="namesList"></datalist>
+      </section>
+
+      <section id="tab-sort" class="tabpanel" role="tabpanel" aria-labelledby="t-sort" hidden>
+        <div class="group-title"><span class="gnum">1</span><div><b>Construir el árbol</b><small>Menores a la izquierda, mayores a la derecha</small></div></div>
+        <div class="card">
+          <div class="card-head"><span class="ch-title"><span class="ch-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9h14M5 15h14M10 4 8 20M16 4l-2 16"/></svg></span><span class="ch-name">Números enteros</span></span><span class="pill" id="numCount">0</span></div>
+          <form id="formNum" class="row" autocomplete="off" novalidate>
+            <div class="field grow">
+              <input id="numInput" placeholder="Ej: 5, 2, 7" inputmode="numeric" aria-label="Números a insertar">
+              <small class="err" aria-live="polite"></small>
+            </div>
+            <button class="btn primary" type="submit">Agregar</button>
+          </form>
+          <div class="row">
+            <button type="button" class="btn accent grow" id="btnNumExample">Ejemplo del PDF (5, 2, 7, 1, 3, 6, 8)</button>
+            <button type="button" class="btn ghost" id="btnNumClear">Vaciar</button>
+          </div>
+          <div class="mini-wrap">
+            <svg id="miniTree" viewBox="0 0 300 160" role="img" aria-label="Árbol binario de enteros"></svg>
+            <div class="mini-empty" id="numEmpty" hidden>Sin números todavía</div>
+          </div>
+          <div class="sub-label">Orden de inserción</div>
+          <div id="numInsertion" class="chips nums"></div>
+        </div>
+
+        <div class="group-title"><span class="gnum">2</span><div><b>Ordenar</b><small>El recorrido inorden entrega los valores ordenados</small></div></div>
+        <div class="card">
+          <div class="row">
+            <button type="button" class="btn grow" id="btnAsc">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 20V4M3 8l4-4 4 4M14 6h7M14 12h5M14 18h3"/></svg>Ascendente
+            </button>
+            <button type="button" class="btn grow" id="btnDesc">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v16M3 16l4 4 4-4M14 6h3M14 12h5M14 18h7"/></svg>Descendente
+            </button>
+          </div>
+          <div class="sub-label">Resultado · <span id="numResultLabel">Inorden ascendente</span></div>
+          <div id="numChips" class="chips nums result"></div>
+          <div class="printed"><span>Salida</span><b id="numPrinted">—</b></div>
+        </div>
+
+        <div class="card collapsible collapsed">
+          <button type="button" class="card-head toggle" aria-expanded="false">
+            <span class="ch-title"><span class="ch-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg></span><span class="ch-name">Ver código de la clase (Python)</span></span>
+            <span class="ch-right"><svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></span>
+          </button>
+          <div class="card-body"><div class="inner">
+<pre class="code"><code><span class="kw">class</span> <span class="cl">BinaryTree</span>:
+    <span class="kw">def</span> <span class="fn">add</span>(self, value):
+        <span class="kw">if</span> self.root <span class="kw">is</span> <span class="kw">None</span>:
+            self.root = <span class="cl">Node</span>(value)
+        <span class="kw">else</span>:
+            self.<span class="fn">add_recursive</span>(self.root, value)
+
+    <span class="kw">def</span> <span class="fn">add_recursive</span>(self, node, value):
+        <span class="kw">if</span> value &lt; node.value:
+            <span class="kw">if</span> node.left <span class="kw">is</span> <span class="kw">None</span>:
+                node.left = <span class="cl">Node</span>(value)
+            <span class="kw">else</span>:
+                self.<span class="fn">add_recursive</span>(node.left, value)
+        <span class="kw">else</span>:
+            <span class="kw">if</span> node.right <span class="kw">is</span> <span class="kw">None</span>:
+                node.right = <span class="cl">Node</span>(value)
+            <span class="kw">else</span>:
+                self.<span class="fn">add_recursive</span>(node.right, value)
+
+    <span class="kw">def</span> <span class="fn">in_order_asc</span>(self, node):
+        <span class="kw">if</span> node:
+            self.<span class="fn">in_order_asc</span>(node.left)
+            <span class="fn">print</span>(node.value)
+            self.<span class="fn">in_order_asc</span>(node.right)</code></pre>
+          </div></div>
+        </div>
+      </section>
+
+      <section id="tab-theory" class="tabpanel" role="tabpanel" aria-labelledby="t-theory" hidden>
+        <div class="group-title"><span class="gnum">1</span><div><b>Concepto</b><small>Estructura jerárquica y no lineal</small></div></div>
+        <div class="card intro">
+          <p>A diferencia de pilas, colas y listas, en un árbol cada nodo puede tener <b>uno o más hijos</b>.</p>
+          <div class="linear-demo" aria-label="Estructura lineal">
+            <span class="sub-label">Lineal</span>
+            <div class="ld-chain"><span>A</span><i></i><span>B</span><i></i><span>C</span><i></i><span>D</span><i></i><span>E</span></div>
+          </div>
+          <div class="sub-label">Jerárquica · árbol binario perfecto A–O</div>
+          <svg id="perfectPreview" class="perfect-preview" viewBox="0 0 320 150" role="img" aria-label="Árbol binario perfecto de 4 niveles y peso 15"></svg>
+          <div class="row center">
+            <span class="hint grow">4 niveles · peso 15 · orden 2</span>
+            <button type="button" class="btn sm" id="btnLoadPerfect">Cargar en el lienzo</button>
+          </div>
+          <div class="legend-inline">
+            <span><i class="dot root"></i>Raíz</span><span><i class="dot branch"></i>Rama</span><span><i class="dot leaf"></i>Hoja</span>
+          </div>
+        </div>
+
+        <div class="group-title"><span class="gnum">2</span><div><b>Glosario interactivo</b><small>Pasa el cursor o haz clic para resaltar en el lienzo</small></div></div>
+        <div id="glossary" class="glossary"></div>
+
+        <div class="group-title"><span class="gnum">3</span><div><b>Lineal vs jerárquica</b><small>¿Cuántos pasos toma encontrar a alguien?</small></div></div>
+        <div class="card" id="compareCard">
+          <form id="formCompare" class="row" autocomplete="off" novalidate>
+            <div class="field grow">
+              <input id="cmpName" value="Ivan" aria-label="Nombre a comparar" list="namesList">
+              <small class="err" aria-live="polite"></small>
+            </div>
+            <button class="btn primary" type="submit">Comparar</button>
+          </form>
+          <div class="bars">
+            <div class="bar-row">
+              <div class="bar-head"><span>Lista ordenada</span><b id="cntList">0</b></div>
+              <div class="bar list"><i id="barList"></i></div>
+              <div class="mini-seq" id="cmpListSeq"></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-head"><span>Árbol binario de búsqueda</span><b id="cntTree">0</b></div>
+              <div class="bar tree"><i id="barTree"></i></div>
+              <div class="mini-seq" id="cmpTreeSeq"></div>
+            </div>
+          </div>
+          <p id="cmpVerdict" class="verdict" aria-live="polite"></p>
+        </div>
+
+        <div class="group-title"><span class="gnum">4</span><div><b>Tipos de árboles</b><small>Características y usos</small></div></div>
+        <div id="types" class="types"></div>
+      </section>
+    </div>
+  </aside>
+
+  <main class="stage">
+    <section class="canvas-wrap glass" id="canvasWrap" aria-label="Lienzo del árbol">      <svg id="canvas" role="img" aria-label="Visualización del árbol binario de búsqueda">
+        <defs>
+          <radialGradient id="gRoot" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#ffd59a"/><stop offset=".45" stop-color="#ff9f1c"/><stop offset="1" stop-color="#c96400"/></radialGradient>
+          <radialGradient id="gBranch" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#e2f2ff"/><stop offset=".45" stop-color="#7cc4ff"/><stop offset="1" stop-color="#2f7fd0"/></radialGradient>
+          <radialGradient id="gLeaf" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#d9f8d0"/><stop offset=".45" stop-color="#7ddc6b"/><stop offset="1" stop-color="#349a26"/></radialGradient>
+          <radialGradient id="gGloss" cx="38%" cy="22%" r="55%"><stop offset="0" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+          <radialGradient id="gComet" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff"/><stop offset=".35" stop-color="#22d3ee"/><stop offset="1" stop-color="#22d3ee" stop-opacity="0"/></radialGradient>
+          <filter id="nodeGlow" x="-90%" y="-90%" width="280%" height="280%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur"/>
+            <feComponentTransfer in="blur" result="glow"><feFuncA type="linear" slope=".55"/></feComponentTransfer>
+            <feDropShadow in="SourceGraphic" dx="0" dy="4" stdDeviation="3" flood-color="#000" flood-opacity=".35" result="shadow"/>
+            <feMerge><feMergeNode in="glow"/><feMergeNode in="shadow"/></feMerge>
+          </filter>
+          <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2.6" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <g id="bands"></g>
+        <g id="viewport">
+          <g id="edges"></g>
+          <g id="particles"></g>
+          <g id="nodes"></g>
+          <g id="fx"></g>
+        </g>
+      </svg>
+
+      <div class="canvas-title">
+        <span class="ct-dot" aria-hidden="true"></span>
+        <b>Árbol de desarrolladores</b>
+        <span id="canvasSub">cargando…</span>
+      </div>
+      <div class="legend" aria-hidden="true">
+        <span><i class="dot root"></i>Raíz</span><span><i class="dot branch"></i>Rama</span><span><i class="dot leaf"></i>Hoja</span>
+      </div>
+      <div id="caseBanner" class="case-banner" role="status" aria-live="polite"></div>
+      <div id="bubble" class="bubble" role="status" aria-live="polite"></div>
+
+      <div class="zoom-ctrl glass" role="group" aria-label="Controles de zoom">
+        <button id="zoomIn" class="icon-btn sm" type="button" aria-label="Acercar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button id="zoomOut" class="icon-btn sm" type="button" aria-label="Alejar"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg></button>
+        <button id="zoomFit" class="icon-btn sm" type="button" aria-label="Ajustar a la pantalla (f)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+      </div>
+
+      <div class="minimap glass" id="minimapBox">
+        <svg id="minimap" viewBox="0 0 168 104" role="img" aria-label="Minimapa: haz clic para navegar"></svg>
+      </div>
+
+      <div id="empty" class="empty-state" hidden>
+        <div class="sapling" aria-hidden="true">
+          <span class="sun"></span>
+          <span class="stem"></span>
+          <span class="leaf l1"></span><span class="leaf l2"></span><span class="leaf l3"></span>
+          <span class="soil"></span>
+          <span class="pot"></span>
+        </div>
+        <h2>El árbol está vacío</h2>
+        <p>Inserta un desarrollador o carga la semilla para ver crecer el árbol.</p>
+        <button type="button" class="btn primary" id="btnSeedEmpty">Cargar semilla</button>
+      </div>
+
+      <div class="canvas-skeleton" aria-hidden="true">
+        <span class="sk-node s1"></span><span class="sk-node s2"></span><span class="sk-node s3"></span><span class="sk-node s4"></span><span class="sk-node s5"></span>
+      </div>
+    </section>
+
+    <section class="console glass" aria-label="Registro de operaciones">
+      <div class="console-head">
+        <svg class="console-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>
+        <span class="console-title">Registro de operaciones</span>
+        <button id="btnClearLog" class="btn xs ghost" type="button">Limpiar</button>
+      </div>
+      <div class="path-line"><span class="pl-label">Ruta</span><span id="pathCode">—</span></div>
+      <div class="result-chips" id="resultChips" aria-label="Secuencia del recorrido"></div>
+      <div class="log" id="log" role="log" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <div class="side-right">
+    <section class="metrics glass" aria-label="Métricas en vivo">
+      <div class="metrics-title">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>
+        <span>Métricas del árbol</span>
+      </div>
+      <div class="metric" id="cHeight"><span class="mi"><svg viewBox="0 0 24 24"><path d="M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4"/></svg></span><span class="k">Altura</span><span class="v" id="mHeight">0</span><span class="s" id="mHeightSub">niveles</span></div>
+      <div class="metric" id="cWeight"><span class="mi"><svg viewBox="0 0 24 24"><circle cx="12" cy="7" r="3"/><circle cx="6.5" cy="17" r="3"/><circle cx="17.5" cy="17" r="3"/></svg></span><span class="k">Peso</span><span class="v" id="mWeight">0</span><span class="s">nodos en total</span></div>
+      <div class="metric"><span class="mi"><svg viewBox="0 0 24 24"><path d="M12 5v5M12 10l-6 7M12 10l6 7"/><circle cx="12" cy="4" r="1.8"/><circle cx="6" cy="18.5" r="1.8"/><circle cx="18" cy="18.5" r="1.8"/></svg></span><span class="k">Orden</span><span class="v" id="mOrder">2</span><span class="s">máximo de hijos</span></div>
+      <div class="metric" id="cRoot"><span class="mi root"><svg viewBox="0 0 24 24"><path d="M4 18h16M5 18l-1-10 5 4 3-6 3 6 5-4-1 10"/></svg></span><span class="k">Raíz</span><span class="v" id="mRoot">—</span><span class="s">primer nodo</span></div>
+      <div class="metric" id="cLeaves"><span class="mi leaf"><svg viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14zM5 19l7-7"/></svg></span><span class="k">Hojas</span><span class="v" id="mLeaves">0</span><span class="s">sin hijos</span></div>
+      <div class="metric" id="cBranches"><span class="mi branch"><svg viewBox="0 0 24 24"><circle cx="6" cy="5" r="2"/><circle cx="6" cy="19" r="2"/><circle cx="18" cy="8" r="2"/><path d="M6 7v10M18 10c0 4-6 4-11.5 7.5"/></svg></span><span class="k">Ramas</span><span class="v" id="mBranches">0</span><span class="s">nodos internos</span></div>
+      <div class="metric" id="cMin"><span class="mi"><svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg></span><span class="k">Mínimo</span><span class="v" id="mMin">—</span><span class="s">extremo izquierdo</span></div>
+      <div class="metric" id="cMax"><span class="mi"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg></span><span class="k">Máximo</span><span class="v" id="mMax">—</span><span class="s">extremo derecho</span></div>
+      <button class="metric avl neutral" id="mAvl" type="button" aria-label="Estado de balance AVL">
+        <span class="mi"><svg viewBox="0 0 24 24"><path d="M12 3v18M5 7h14M5 7l-3 7h6zM19 7l-3 7h6zM8 21h8"/></svg></span><span class="k">AVL balanceado</span><span class="v" id="mAvlVal">—</span><span class="s" id="mAvlNode"></span>
+      </button>
+    </section>
+
+    <aside id="inspector" class="inspector glass" aria-label="Inspector del nodo seleccionado">
+      <div id="inspectorBody"></div>
+    </aside>
+  </div>
+</div>
+
+<div id="toasts" class="toasts" aria-live="assertive"></div>
+<div id="confetti" class="confetti-layer" aria-hidden="true"></div>
+
+<dialog id="helpDialog" class="help glass" aria-labelledby="helpTitle">
+  <div class="card-head"><span class="ch-name" id="helpTitle">Atajos de teclado</span><button id="btnCloseHelp" class="icon-btn sm" type="button" aria-label="Cerrar">×</button></div>
+  <ul class="kbd-list">
+    <li><kbd>/</kbd><span>Buscar un desarrollador</span></li>
+    <li><kbd>i</kbd><span>Insertar</span></li>
+    <li><kbd>d</kbd><span>Eliminar</span></li>
+    <li><kbd>espacio</kbd><span>Reproducir / pausar recorrido</span></li>
+    <li><kbd>f</kbd><span>Ajustar a la pantalla</span></li>
+    <li><kbd>t</kbd><span>Cambiar tema</span></li>
+    <li><kbd>+</kbd> <kbd>−</kbd><span>Zoom</span></li>
+    <li><kbd>Esc</kbd><span>Quitar selección</span></li>
+  </ul>
+</dialog>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
